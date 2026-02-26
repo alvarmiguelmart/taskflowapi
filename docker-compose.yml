@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: taskflow-db
+    environment:
+      POSTGRES_USER: taskflow
+      POSTGRES_PASSWORD: taskflow123
+      POSTGRES_DB: taskflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - taskflow-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: taskflow-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - taskflow-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: taskflow-api
+    environment:
+      DATABASE_URL: postgresql://taskflow:taskflow123@postgres:5432/taskflow
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      NODE_ENV: development
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./src:/app/src
+      - ./prisma:/app/prisma
+    command: sh -c "npx prisma migrate deploy && node prisma/seed.js && npm run dev"
+    networks:
+      - taskflow-network
+
+  adminer:
+    image: adminer
+    container_name: taskflow-adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - taskflow-network
+
+volumes:
+  postgres_data:
+
+networks:
+  taskflow-network:
+    driver: bridge
+
