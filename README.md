@@ -2,7 +2,7 @@
 
 ## Sobre o Projeto
 
-API completa para gerenciamento de tarefas com autenticação, projetos, comentários e tags. Desenvolvida para demonstrar boas práticas de desenvolvimento backend.
+API completa para gerenciamento de tarefas com autenticação, projetos, comentários e tags.
 
 ## Tecnologias
 
@@ -25,8 +25,8 @@ API completa para gerenciamento de tarefas com autenticação, projetos, coment�
 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/taskflow.git
-cd taskflow
+git clone https://github.com/alvarmiguelmart/taskflowapi.git
+cd taskflowapi
 ```
 
 2. Instale as dependências
